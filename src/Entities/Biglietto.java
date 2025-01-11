@@ -7,6 +7,10 @@ public class Biglietto {
     public Biglietto() {
     }
 
+    public Biglietto(Integer id_user) {
+        this.id_user = id_user;
+    }
+
     public Integer getId() {
         return id;
     }

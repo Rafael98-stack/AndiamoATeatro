@@ -79,9 +79,11 @@ public class BigliettoDAO {
                     resultSet.getString("telefono")
                     );
             user.setId(resultSet.getInt("id"));
+
             Biglietto biglietto = new Biglietto();
             biglietto.setId(resultSet.getInt("biglietto_id"));
             biglietto.setId_user(resultSet.getInt("id_user"));
+
             return String.format("UserBiglietto{" +
                     "id='%s', " +
                     "nome='%s', " +
@@ -100,5 +102,9 @@ public class BigliettoDAO {
                     );
         }
        throw new ObjNotFoundException("Object not Found or Empty.");
+    }
+
+    public static void main(String[] args) {
+
     }
 }
