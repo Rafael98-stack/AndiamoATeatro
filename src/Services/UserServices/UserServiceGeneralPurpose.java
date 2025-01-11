@@ -27,23 +27,29 @@ public class UserServiceGeneralPurpose {
     }
 
     public void registerUser(UserRegisterDto userRegisterDto) throws SQLException {
-        User user = new User(userRegisterDto.nome(),
+        User user = new User(
+                userRegisterDto.nome(),
                 userRegisterDto.cognome(),
                 userRegisterDto.email(),
                 userRegisterDto.indirizzo(),
-                userRegisterDto.telefono());
+                userRegisterDto.telefono()
+        );
         userDAO.registerUser(user);
     }
 
     public void updateUser(UserUpdateDto userUpdateDto) throws SQLException {
-User user = new User(
-        userUpdateDto.nome(),
-        userUpdateDto.cognome(),
-        userUpdateDto.email(),
-        userUpdateDto.indirizzo(),
-        userUpdateDto.telefono()
-);
-user.setId(userUpdateDto.id());
-userDAO.updateUser(user);
+        User user = new User(
+                userUpdateDto.nome(),
+                userUpdateDto.cognome(),
+                userUpdateDto.email(),
+                userUpdateDto.indirizzo(),
+                userUpdateDto.telefono()
+        );
+        user.setId(userUpdateDto.id());
+        userDAO.updateUser(user);
+    }
+
+    public void deleteUserById(Integer id) throws SQLException {
+        userDAO.deleteUserById(id);
     }
 }

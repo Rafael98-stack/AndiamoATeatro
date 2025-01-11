@@ -65,7 +65,7 @@ public class UserDAO {
 
     public void registerUser(User user) throws SQLException {
     String query = "INSERT INTO User (nome,cognome,email,indirizzo,telefono) VALUES (?,?,?,?,?)";
-        try {
+
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,user.getNome());
             preparedStatement.setString(2,user.getCognome());
@@ -73,9 +73,6 @@ public class UserDAO {
             preparedStatement.setString(4,user.getIndirizzo());
             preparedStatement.setString(5,user.getTelefono());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
     public void updateUser(User user) throws SQLException {
         String query = "UPDATE User SET nome = ?, cognome = ?, email = ?, indirizzo = ?, telefono = ? WHERE id = ?";
@@ -86,6 +83,13 @@ public class UserDAO {
         preparedStatement.setString(4, user.getIndirizzo());
         preparedStatement.setString(5, user.getTelefono());
         preparedStatement.setInt(6,user.getId());
-    preparedStatement.executeUpdate();
+        preparedStatement.executeUpdate();
+    }
+
+    public void deleteUserById(Integer id) throws SQLException {
+        String query = "DELETE FROM User WHERE id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1,id);
+        preparedStatement.executeUpdate();
     }
 }
