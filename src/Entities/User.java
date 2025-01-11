@@ -6,11 +6,6 @@ public class User extends Persona{
     public User() {
     }
 
-    public User(Integer id, String nome, String cognome, String email, String indirizzo, String telefono) {
-        super(nome, cognome, email, indirizzo, telefono);
-        this.id = id;
-    }
-
     public User(String nome, String cognome, String email, String indirizzo, String telefono) {
         super(nome, cognome, email, indirizzo, telefono);
     }

@@ -1,5 +1,7 @@
 package Configurations;
 
+import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,12 +13,13 @@ public class JDBC {
 
     private static Connection connection = null;
 
-    public static Connection getConnection() {
+    public static synchronized Connection getConnection() throws JDBCErrorConnectionException {
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.err.println("Connection failed: " + e.getMessage());
+               throw new JDBCErrorConnectionException("Connessione al database fallita.");
             }
         }
         return connection;
