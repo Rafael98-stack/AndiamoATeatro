@@ -58,4 +58,15 @@ public class Posto {
     public void setId_biglietto(Integer id_biglietto) {
         this.id_biglietto = id_biglietto;
     }
+
+    @Override
+    public String toString() {
+        return "Posto{" +
+                "id=" + id +
+                ", fila='" + fila + '\'' +
+                ", numero=" + numero +
+                ", available_unavailable=" + available_unavailable +
+                ", id_biglietto=" + id_biglietto +
+                '}';
+    }
 }

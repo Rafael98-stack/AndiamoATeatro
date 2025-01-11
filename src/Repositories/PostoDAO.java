@@ -75,7 +75,7 @@ public class PostoDAO {
         preparedStatement.executeUpdate();
     }
     public void updatePosto(Posto posto) throws SQLException {
-        String query = "UPDATE User SET fila = ?, numero = ?, available_unavailable = ?, id_biglietto = ? WHERE id = ?";
+        String query = "UPDATE Posto SET fila = ?, numero = ?, available_unavailable = ?, id_biglietto = ? WHERE id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, posto.getFila());
         preparedStatement.setInt(2, posto.getNumero());
@@ -90,5 +90,12 @@ public class PostoDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1,id);
         preparedStatement.executeUpdate();
+    }
+
+    // INCOMPLETO, NON TESTARE ANCORA.
+    public String getPostoBiglietti() throws SQLException {
+        String query = "SELECT * FROM Posto p JOIN Biglietto b ON p.id_biglietto = b.id ORDER BY DESC";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        return null;
     }
 }
