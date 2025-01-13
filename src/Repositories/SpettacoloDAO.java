@@ -1,9 +1,11 @@
 package Repositories;
 
 import Configurations.JDBC;
+import Entities.EnumKeyWords.SpettacoloEnums.Genere;
 import Entities.Spettacolo;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
+import ExceptionHandlers.JDBCExceptions.JDBCNoValueFieldException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +20,7 @@ public class SpettacoloDAO {
     public SpettacoloDAO() throws JDBCErrorConnectionException {
     }
 
-    public Spettacolo getSpettacoloById(Integer id) throws SQLException, ObjNotFoundException {
+    public Spettacolo getSpettacoloById(Integer id) throws SQLException, ObjNotFoundException, JDBCNoValueFieldException {
         String query = "SELECT * FROM Spettacolo WHERE id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1,id);
@@ -26,9 +28,9 @@ public class SpettacoloDAO {
         if (resultSet.next()){
             Spettacolo spettacolo = new Spettacolo(
                     resultSet.getTime("orario"),
-                    resultSet.getInt("numero_posti"),
-                    resultSet.getInt("id_posto"),
-                    resultSet.getInt("id_spettacolo")
+                    resultSet.getString("luogo"),
+                    Genere.fromString(resultSet.getString("id_posto")),
+                    resultSet.getString("titolo")
             );
             spettacolo.setId(resultSet.getInt("id"));
             return spettacolo;
@@ -36,7 +38,7 @@ public class SpettacoloDAO {
         throw new ObjNotFoundException("Object not found or Empty");
     }
 
-    public List<Spettacolo> getAllSpettacoli() throws SQLException, ObjNotFoundException {
+    public List<Spettacolo> getAllSpettacoli() throws SQLException, ObjNotFoundException, JDBCNoValueFieldException {
         List<Spettacolo> sale = new ArrayList<>();
         String query = "SELECT * FROM Spettacolo";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -44,10 +46,10 @@ public class SpettacoloDAO {
         if (resultSet.next()){
             while (resultSet.next()){
                 Spettacolo spettacolo = new Spettacolo(
-                        resultSet.getString("nome"),
-                        resultSet.getInt("numero_posti"),
-                        resultSet.getInt("id_posto"),
-                        resultSet.getInt("id_spettacolo")
+                        resultSet.getTime("orario"),
+                        resultSet.getString("luogo"),
+                        Genere.fromString(resultSet.getString("id_posto")),
+                        resultSet.getString("titolo")
                 );
                 spettacolo.setId(resultSet.getInt("id"));
                 sale.add(spettacolo);
@@ -57,21 +59,21 @@ public class SpettacoloDAO {
     }
 
     public void insertNewSpettacolo(Spettacolo spettacolo) throws SQLException {
-        String query = "INSERT INTO Spettacolo (nome,numero_posti,id_posto,id_spettacolo) VALUES(?,?,?,?)";
+        String query = "INSERT INTO Spettacolo (orario,luogo,genere,titolo) VALUES(?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, spettacolo.getNome());
-        preparedStatement.setInt(2, spettacolo.getNumero_posti());
-        preparedStatement.setInt(3, spettacolo.getId_posto());
-        preparedStatement.setInt(4, spettacolo.getId_spettacolo());
+        preparedStatement.setTime(1, spettacolo.getOrario());
+        preparedStatement.setString(2, spettacolo.getLuogo());
+        preparedStatement.setString(3, spettacolo.getGenere().name());
+        preparedStatement.setString(4, spettacolo.getTitolo());
         preparedStatement.executeUpdate();
     }
     public void updateSpettacolo(Spettacolo spettacolo) throws SQLException {
         String query = "UPDATE Spettacolo SET nome = ?, numero_posti = ?, id_posto = ?, id_spettacolo = ? WHERE id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, spettacolo.getNome());
-        preparedStatement.setInt(2,spettacolo.getNumero_posti());
-        preparedStatement.setInt(3,spettacolo.getId_posto());
-        preparedStatement.setInt(4,spettacolo.getId_spettacolo());
+        preparedStatement.setTime(1, spettacolo.getOrario());
+        preparedStatement.setString(2, spettacolo.getLuogo());
+        preparedStatement.setString(3, spettacolo.getGenere().name());
+        preparedStatement.setString(4, spettacolo.getTitolo());
         preparedStatement.setInt(5,spettacolo.getId());
         preparedStatement.executeUpdate();
     }
@@ -81,6 +83,6 @@ public class SpettacoloDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1,id);
         preparedStatement.executeUpdate();
-        System.out.println("La spettacolo è stata cancellata correttamente.");
+        System.out.println("Lo spettacolo è stato cancellato correttamente.");
     }
 }
