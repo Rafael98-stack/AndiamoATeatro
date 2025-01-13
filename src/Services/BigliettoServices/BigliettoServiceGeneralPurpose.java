@@ -1,6 +1,7 @@
 package Services.BigliettoServices;
 
 import Dtos.BigliettoDtos.BigliettoRegisterDto;
+import Dtos.BigliettoDtos.BigliettoUpdateDto;
 import Entities.Biglietto;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
@@ -33,6 +34,15 @@ public class BigliettoServiceGeneralPurpose {
         );
         bigliettoDAO.insertNewBiglietto(biglietto);
     }
+
+    public void updateBiglietto(BigliettoUpdateDto bigliettoUpdateDto) throws SQLException {
+        Biglietto biglietto = new Biglietto(
+                bigliettoUpdateDto.id_user()
+        );
+        biglietto.setId(bigliettoUpdateDto.id_user());
+        bigliettoDAO.updateBiglietto(biglietto);
+    }
+
     public void deleteBigliettoById(Integer id) throws SQLException {
         bigliettoDAO.deleteBigliettoById(id);
     }

@@ -56,6 +56,13 @@ public class BigliettoDAO {
         preparedStatement.setInt(1, biglietto.getId_user());
         preparedStatement.executeUpdate();
     }
+    public void updateBiglietto(Biglietto biglietto) throws SQLException {
+        String query = "UPDATE Biglietto SET id_user = ? WHERE id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, biglietto.getId());
+        preparedStatement.setInt(2,biglietto.getId());
+        preparedStatement.executeUpdate();
+    }
 
     public void deleteBigliettoById(Integer id) throws SQLException {
         String query = "DELETE FROM Biglietto WHERE id = ?";
