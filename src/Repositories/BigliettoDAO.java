@@ -3,6 +3,7 @@ package Repositories;
 import Configurations.JDBC;
 import Entities.Biglietto;
 import Entities.User;
+import ExceptionHandlers.GeneralExceptionsTestings.NoOutputException;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
 import ExceptionHandlers.UserExceptions.UserNotFoundException;
@@ -72,6 +73,17 @@ public class BigliettoDAO {
         preparedStatement.setInt(1,id);
         preparedStatement.executeUpdate();
         System.out.println("Il biglietto è stato cancellato correttamente.");
+    }
+
+    public Integer getBigliettoCountUser(Integer id) throws SQLException, NoOutputException {
+        String query = "SELECT u.id AS user_id, COUNT(b.id) AS num_biglietti FROM Biglietto b JOIN User u ON b.id_user = u.id WHERE u.id = ? GROUP BY u.id";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1,id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()){
+            return resultSet.getInt("num_biglietti");
+        }
+        throw new NoOutputException("Nessun Dato Trovato.");
     }
 
     public String getUserByBigliettoId(Integer id) throws UserNotFoundException, SQLException, ObjNotFoundException {

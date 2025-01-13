@@ -3,6 +3,7 @@ package Services.BigliettoServices;
 import Dtos.BigliettoDtos.BigliettoRegisterDto;
 import Dtos.BigliettoDtos.BigliettoUpdateDto;
 import Entities.Biglietto;
+import ExceptionHandlers.GeneralExceptionsTestings.NoOutputException;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
 import ExceptionHandlers.JDBCExceptions.JDBCNoValueFieldException;
@@ -22,6 +23,10 @@ public class BigliettoServiceGeneralPurpose {
     public Biglietto getBigliettoById(Integer id) throws SQLException, JDBCNoValueFieldException, PostoNotFoundException, ObjNotFoundException {
         bigliettoDAO.getBigliettoById(id);
         return null;
+    }
+
+    public Integer getBigliettoCountUser(Integer id) throws NoOutputException, SQLException {
+        return bigliettoDAO.getBigliettoCountUser(id);
     }
     public List<Biglietto> getAllBiglietti() throws SQLException, PostiNotFoundException, JDBCNoValueFieldException, ObjNotFoundException {
         bigliettoDAO.getAllBiglietti();

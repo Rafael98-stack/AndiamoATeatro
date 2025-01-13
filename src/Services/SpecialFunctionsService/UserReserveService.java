@@ -9,6 +9,7 @@ import Entities.EnumKeyWords.PostoEnums.Availability;
 import Entities.Posto;
 import Entities.Sala;
 import ExceptionHandlers.GeneralExceptionsTestings.MaxReservedTicket;
+import ExceptionHandlers.GeneralExceptionsTestings.NoOutputException;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.GeneralExceptionsTestings.PostoIsAlreadyTakenException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
@@ -32,7 +33,7 @@ public class UserReserveService {
     public UserReserveService() throws JDBCErrorConnectionException {
     }
 
-    public void UserReservePosto (UserReservePostoDto userReservePosto) throws ObjNotFoundException, SQLException, PostiNotFoundException, JDBCNoValueFieldException, MaxReservedTicket, UserNotFoundException, PostoNotFoundException, PostoIsAlreadyTakenException {
+    public void UserReservePosto (UserReservePostoDto userReservePosto) throws ObjNotFoundException, SQLException, PostiNotFoundException, JDBCNoValueFieldException, MaxReservedTicket, UserNotFoundException, PostoNotFoundException, PostoIsAlreadyTakenException, NoOutputException {
 
         Biglietto biglietto = new Biglietto(
                 userReservePosto.id_user()
@@ -53,7 +54,7 @@ public class UserReserveService {
         Sala sala = salaServiceGeneralPurpose.getSalaById(
                 userReservePosto.id_sala()
         );
-
+/*
         List<Biglietto> biglietti = bigliettoServiceGeneralPurpose.getAllBiglietti();
         Integer count = 0;
         Integer currentBiglietto = 0;
@@ -66,6 +67,10 @@ public class UserReserveService {
                 throw new MaxReservedTicket("Numero massimo di biglietti Prenotati");
             }
                 currentBiglietto++;
+        }
+*/
+        if (bigliettoServiceGeneralPurpose.getBigliettoCountUser(userReservePosto.id_user()) == 4){
+            throw new MaxReservedTicket("Numero massimo di biglietti prenotato.");
         }
 
         bigliettoServiceGeneralPurpose.insertNewBiglietto(bigliettoRegisterDto);
