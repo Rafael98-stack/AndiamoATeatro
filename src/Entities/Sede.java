@@ -68,4 +68,16 @@ public class Sede {
     public void setId_sala(Integer id_sala) {
         this.id_sala = id_sala;
     }
+
+    @Override
+    public String toString() {
+        return "Sede{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", indirizzo='" + indirizzo + '\'' +
+                ", comune='" + comune + '\'' +
+                ", inside_outside=" + inside_outside +
+                ", id_sala=" + id_sala +
+                '}';
+    }
 }

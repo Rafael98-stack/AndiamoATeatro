@@ -16,7 +16,7 @@ import java.util.List;
 
 public class BigliettoDAO {
     Connection connection = JDBC.getConnection();
-    UserDAO userDAO = new UserDAO();
+
     public BigliettoDAO() throws JDBCErrorConnectionException {
     }
 
@@ -26,9 +26,10 @@ public class BigliettoDAO {
         preparedStatement.setInt(1,id);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()){
-            Biglietto biglietto = new Biglietto();
+            Biglietto biglietto = new Biglietto(
+                    resultSet.getInt("id_user")
+            );
             biglietto.setId(resultSet.getInt("id"));
-            biglietto.setId_user(resultSet.getInt("id_user"));
             return biglietto;
         }
         throw new ObjNotFoundException("Object not found or Empty");
@@ -41,9 +42,10 @@ public class BigliettoDAO {
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()){
             while (resultSet.next()){
-                Biglietto biglietto = new Biglietto();
+                Biglietto biglietto = new Biglietto(
+                        resultSet.getInt("id_user")
+                );
                 biglietto.setId(resultSet.getInt("id"));
-                biglietto.setId_user(resultSet.getInt("id_user"));
                 biglietti.add(biglietto);
             }
         }
