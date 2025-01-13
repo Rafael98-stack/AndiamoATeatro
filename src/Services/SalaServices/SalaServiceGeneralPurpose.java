@@ -22,12 +22,12 @@ public class SalaServiceGeneralPurpose {
         salaDAO.getSalaById(id);
         return null;
     }
-    public List<Sala> getAllUser() throws UsersNotFoundException, SQLException, ObjNotFoundException {
+    public List<Sala> getAllSale() throws UsersNotFoundException, SQLException, ObjNotFoundException {
         salaDAO.getAllSale();
         return null;
     }
 
-    public void registerUser(SalaRegisterDto salaRegisterDto) throws SQLException {
+    public void insertNewSala(SalaRegisterDto salaRegisterDto) throws SQLException {
         Sala sala = new Sala(
                 salaRegisterDto.nome(),
                 salaRegisterDto.numero_posti(),
