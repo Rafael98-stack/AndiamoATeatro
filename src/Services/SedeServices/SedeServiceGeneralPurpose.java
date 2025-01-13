@@ -21,6 +21,7 @@ public class SedeServiceGeneralPurpose {
         sedeDAO.getSedeById(id);
         return null;
     }
+
     public List<Sede> getAllSedi() throws SQLException, JDBCNoValueFieldException, ObjNotFoundException {
         sedeDAO.getAllSedi();
         return null;

@@ -19,6 +19,12 @@ public class Posto {
         this.id_biglietto = id_biglietto;
     }
 
+    public Posto(String fila, Integer numero, Integer id_biglietto) {
+        this.fila = fila;
+        this.numero = numero;
+        this.id_biglietto = id_biglietto;
+    }
+
     public Integer getId() {
         return id;
     }
