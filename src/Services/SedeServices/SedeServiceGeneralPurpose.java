@@ -1,6 +1,7 @@
 package Services.SedeServices;
 
 import Dtos.SedeDtos.SedeRegisterDto;
+import Dtos.SedeDtos.SedeUpdateDto;
 import Entities.Sede;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
@@ -16,16 +17,16 @@ public class SedeServiceGeneralPurpose {
     public SedeServiceGeneralPurpose() throws JDBCErrorConnectionException {
     }
 
-    public Sede getBigliettoById(Integer id) throws SQLException, JDBCNoValueFieldException, ObjNotFoundException {
+    public Sede getSedeById(Integer id) throws SQLException, JDBCNoValueFieldException, ObjNotFoundException {
         sedeDAO.getSedeById(id);
         return null;
     }
-    public List<Sede> getAllBiglietti() throws SQLException, JDBCNoValueFieldException, ObjNotFoundException {
+    public List<Sede> getAllSedi() throws SQLException, JDBCNoValueFieldException, ObjNotFoundException {
         sedeDAO.getAllSedi();
         return null;
     }
 
-    public void insertNewBiglietto(SedeRegisterDto sedeRegisterDto) throws SQLException {
+    public void insertNewSede(SedeRegisterDto sedeRegisterDto) throws SQLException {
         Sede biglietto = new Sede(
                 sedeRegisterDto.nome(),
                 sedeRegisterDto.indirizzo(),
@@ -34,6 +35,18 @@ public class SedeServiceGeneralPurpose {
                 sedeRegisterDto.id_sala()
         );
         sedeDAO.insertNewSede(biglietto);
+    }
+
+    public void updateSede(SedeUpdateDto sedeUpdateDto) throws SQLException {
+        Sede sede = new Sede(
+                sedeUpdateDto.nome(),
+                sedeUpdateDto.indirizzo(),
+                sedeUpdateDto.comune(),
+                sedeUpdateDto.inside_outside(),
+                sedeUpdateDto.id_sala()
+        );
+        sede.setId(sedeUpdateDto.id());
+        sedeDAO.updateSede(sede);
     }
     public void deleteSedeById(Integer id) throws SQLException {
         sedeDAO.deleteSedeById(id);
