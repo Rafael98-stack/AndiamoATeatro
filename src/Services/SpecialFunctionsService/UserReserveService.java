@@ -42,10 +42,6 @@ public class UserReserveService {
 
     public void UserReservePosto (UserReservePostoDto userReservePosto) throws ObjNotFoundException, SQLException, PostiNotFoundException, JDBCNoValueFieldException, MaxReservedTicket, UserNotFoundException, PostoNotFoundException, PostoIsAlreadyTakenException, NoOutputException {
 
-
-
-
-
         if (bigliettoServiceGeneralPurpose.getBigliettoCountUser(userReservePosto.id_user()) == 4){
             System.out.println("Numero massimo di biglietti raggiunto.");
         if (bigliettoServiceGeneralPurpose.getBigliettoCountUser(userReservePosto.id_user()) > 4){

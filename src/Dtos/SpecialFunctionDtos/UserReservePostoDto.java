@@ -7,4 +7,5 @@ public record UserReservePostoDto(
         String fila,
         Integer numero
 ) {
+
 }
