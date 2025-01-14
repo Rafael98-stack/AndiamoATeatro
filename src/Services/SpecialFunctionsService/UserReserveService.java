@@ -100,5 +100,7 @@ public class UserReserveService {
 
         SedeRegisterDto sedeRegisterDto = new SedeRegisterDto("Il Cinema","Via Marmora","Roma", Location.inside,salaServiceGeneralPurpose.getSalaById(1).getId());
         sedeServiceGeneralPurpose.insertNewSede(sedeRegisterDto);
+
+        // gggggggggggggggggg
     }
 }
