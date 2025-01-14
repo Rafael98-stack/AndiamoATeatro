@@ -4,6 +4,7 @@ import Configurations.JDBC;
 import Entities.EnumKeyWords.SedeEnums.Location;
 import Entities.Sala;
 import Entities.Sede;
+import Entities.Spettacolo;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
 import ExceptionHandlers.JDBCExceptions.JDBCNoValueFieldException;
@@ -63,6 +64,13 @@ public class SedeDAO {
             return posti;
         }
         throw new ObjNotFoundException("Sedi non trovati.");
+    }
+
+    public List<Spettacolo> getAllSpettacoliBySedeNome(String comune) throws SQLException {
+        String query = "SELECT sp.* FROM Sede se JOIN Sala sa ON se.id_sala = sa.id JOIN Spettacolo sp ON sa.id_spettacolo = sp.id WHERE se.nome = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+        return null;
     }
 
     public List<Sala> getAllSaleBySedeId(Integer id) throws ObjNotFoundException, SQLException {
