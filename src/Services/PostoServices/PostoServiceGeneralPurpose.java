@@ -3,6 +3,7 @@ package Services.PostoServices;
 import Dtos.PostoDtos.PostoRegisterDto;
 import Dtos.PostoDtos.PostoUpdateDto;
 import Entities.Posto;
+import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
 import ExceptionHandlers.JDBCExceptions.JDBCNoValueFieldException;
 import ExceptionHandlers.PostoExceptions.PostiNotFoundException;
@@ -37,6 +38,9 @@ public class PostoServiceGeneralPurpose {
         postoDAO.insertNewPosto(posto);
     }
 
+    public Integer postoIsAlredyAssigned(Integer id) throws ObjNotFoundException, SQLException {
+        return postoDAO.postoIsAlredyAssigned(id);
+    }
     public void updatePosto(PostoUpdateDto postoUpdateDto) throws SQLException {
         Posto posto = new Posto(
                 postoUpdateDto.fila(),

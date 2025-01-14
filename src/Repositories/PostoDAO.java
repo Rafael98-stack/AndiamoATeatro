@@ -3,6 +3,7 @@ package Repositories;
 import Configurations.JDBC;
 import Entities.EnumKeyWords.PostoEnums.Availability;
 import Entities.Posto;
+import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
 import ExceptionHandlers.JDBCExceptions.JDBCNoValueFieldException;
 import ExceptionHandlers.PostoExceptions.PostiNotFoundException;
@@ -90,6 +91,17 @@ public class PostoDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1,id);
         preparedStatement.executeUpdate();
+    }
+
+    public Integer postoIsAlredyAssigned(Integer id) throws SQLException, ObjNotFoundException {
+        String query = "SELECT  p.id AS posto_id, b.id AS biglietto_id FROM posto p LEFT JOIN  biglietto b ON p.id = b.posto_id WHERE p.id = ? AND b.id IS NOT NULL";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1,id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()){
+            return resultSet.getInt("biglietto_id");
+        }
+        throw new ObjNotFoundException("Value not found.");
     }
 
     // INCOMPLETO, NON TESTARE ANCORA.

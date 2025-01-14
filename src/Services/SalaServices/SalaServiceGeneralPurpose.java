@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class SalaServiceGeneralPurpose {
+
     SalaDAO salaDAO = new SalaDAO();
 
     public SalaServiceGeneralPurpose() throws JDBCErrorConnectionException {

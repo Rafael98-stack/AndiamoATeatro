@@ -28,6 +28,7 @@ public class BigliettoServiceGeneralPurpose {
     public Integer getBigliettoCountUser(Integer id) throws NoOutputException, SQLException {
         return bigliettoDAO.getBigliettoCountUser(id);
     }
+
     public List<Biglietto> getAllBiglietti() throws SQLException, PostiNotFoundException, JDBCNoValueFieldException, ObjNotFoundException {
         bigliettoDAO.getAllBiglietti();
         return null;

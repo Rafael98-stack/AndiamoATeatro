@@ -65,6 +65,7 @@ public class SalaDAO {
         preparedStatement.setInt(4, sala.getId_spettacolo());
         preparedStatement.executeUpdate();
     }
+
     public void updateSala(Sala sala) throws SQLException {
         String query = "UPDATE Sala SET nome = ?, numero_posti = ?, id_posto = ?, id_spettacolo = ? WHERE id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
