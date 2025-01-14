@@ -1,7 +1,9 @@
 package Repositories;
 
 import Configurations.JDBC;
+import Entities.Biglietto;
 import Entities.User;
+import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
 import ExceptionHandlers.UserExceptions.UserNotFoundException;
 import ExceptionHandlers.UserExceptions.UsersNotFoundException;
@@ -92,4 +94,24 @@ public class UserDAO {
         preparedStatement.setInt(1,id);
         preparedStatement.executeUpdate();
     }
-}
+
+    public List<Biglietto> getAllBigliettiByUserId(Integer id_user) throws SQLException, ObjNotFoundException {
+            String query = "SELECT u.id, b.* as biglietto_id FROM User u JOIN Biglietto b ON u.id = b.id_user WHERE u.id = ? ORDER BY ASC";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,id_user);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                List<Biglietto> biglietti = new ArrayList<>();
+                while (resultSet.next()){
+                    Biglietto biglietto = new Biglietto(
+                            resultSet.getInt("id_user")
+                    );
+                    biglietto.setId(resultSet.getInt("id"));
+                    biglietti.add(biglietto);
+                }
+                return biglietti;
+            }
+            throw new ObjNotFoundException("Object not Found or Empty.");
+        }
+    }
+

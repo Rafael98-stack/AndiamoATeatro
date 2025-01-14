@@ -2,6 +2,7 @@ package Services.UserServices;
 
 import Dtos.UserDtos.UserUpdateDto;
 import Dtos.UserDtos.UserRegisterDto;
+import Entities.Biglietto;
 import Entities.User;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
 import ExceptionHandlers.UserExceptions.UserNotFoundException;
@@ -51,5 +52,9 @@ public class UserServiceGeneralPurpose {
 
     public void deleteUserById(Integer id) throws SQLException {
         userDAO.deleteUserById(id);
+    }
+
+    public List<Biglietto> getAllBigliettiByUserId(Integer id_user){
+        return getAllBigliettiByUserId(id_user);
     }
 }

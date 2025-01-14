@@ -16,34 +16,24 @@ import ExceptionHandlers.PostoExceptions.PostoNotFoundException;
 import ExceptionHandlers.UserExceptions.UserNotFoundException;
 import Services.BigliettoServices.BigliettoServiceGeneralPurpose;
 import Services.PostoServices.PostoServiceGeneralPurpose;
+import Services.UserServices.UserServiceGeneralPurpose;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class UserReserveService {
 
     PostoServiceGeneralPurpose postoServiceGeneralPurpose = new PostoServiceGeneralPurpose();
     BigliettoServiceGeneralPurpose bigliettoServiceGeneralPurpose = new BigliettoServiceGeneralPurpose();
-
+    UserServiceGeneralPurpose userServiceGeneralPurpose = new UserServiceGeneralPurpose();
     public UserReserveService() throws JDBCErrorConnectionException {
     }
 
     public void UserReservePosto (UserReservePostoDto userReservePosto) throws ObjNotFoundException, SQLException, PostiNotFoundException, JDBCNoValueFieldException, MaxReservedTicket, UserNotFoundException, PostoNotFoundException, PostoIsAlreadyTakenException, NoOutputException {
 
-        Biglietto biglietto = new Biglietto(
-                userReservePosto.id_user()
-        );
 
-        PostoUpdateDto postoUpdateDto = new PostoUpdateDto(
-                userReservePosto.id_posto(),
-                userReservePosto.fila(),
-                userReservePosto.numero(),
-                Availability.unavailable,
-                biglietto.getId()
-        );
 
-        BigliettoRegisterDto bigliettoRegisterDto = new BigliettoRegisterDto(
-                userReservePosto.id_user()
-        );
+
 
         if (bigliettoServiceGeneralPurpose.getBigliettoCountUser(userReservePosto.id_user()) == 4){
             System.out.println("Numero massimo di biglietti raggiunto.");
@@ -51,9 +41,21 @@ public class UserReserveService {
             throw new MaxReservedTicket("Numero massimo di biglietti prenotato.");
         }
         }
+        BigliettoRegisterDto bigliettoRegisterDto = new BigliettoRegisterDto(
+                userReservePosto.id_user()
+        );
 
         bigliettoServiceGeneralPurpose.insertNewBiglietto(bigliettoRegisterDto);
+        List<Biglietto> biglietti = userServiceGeneralPurpose.getAllBigliettiByUserId(userReservePosto.id_user());
 
+
+        PostoUpdateDto postoUpdateDto = new PostoUpdateDto(
+                userReservePosto.id_posto(),
+                userReservePosto.fila(),
+                userReservePosto.numero(),
+                Availability.unavailable,
+                biglietti.get(biglietti.size()-1).getId()
+        );
 
         if (postoServiceGeneralPurpose.postoIsAlredyAssigned(userReservePosto.id_posto()) == null){
             postoServiceGeneralPurpose.updatePosto(postoUpdateDto);
