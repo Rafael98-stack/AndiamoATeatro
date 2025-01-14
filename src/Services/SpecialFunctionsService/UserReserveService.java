@@ -3,8 +3,11 @@ package Services.SpecialFunctionsService;
 import Dtos.BigliettoDtos.BigliettoRegisterDto;
 import Dtos.PostoDtos.PostoUpdateDto;
 import Dtos.SpecialFunctionDtos.UserReservePostoDto;
+import Dtos.SpettacoloDtos.SpettacoloRegisterDto;
+import Dtos.UserDtos.UserRegisterDto;
 import Entities.Biglietto;
 import Entities.EnumKeyWords.PostoEnums.Availability;
+import Entities.EnumKeyWords.SpettacoloEnums.Genere;
 import ExceptionHandlers.GeneralExceptionsTestings.MaxReservedTicket;
 import ExceptionHandlers.GeneralExceptionsTestings.NoOutputException;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
@@ -16,9 +19,13 @@ import ExceptionHandlers.PostoExceptions.PostoNotFoundException;
 import ExceptionHandlers.UserExceptions.UserNotFoundException;
 import Services.BigliettoServices.BigliettoServiceGeneralPurpose;
 import Services.PostoServices.PostoServiceGeneralPurpose;
+import Services.SalaServices.SalaServiceGeneralPurpose;
+import Services.SedeServices.SedeServiceGeneralPurpose;
+import Services.SpettacoloServices.SpettacoloServiceGeneralPurpose;
 import Services.UserServices.UserServiceGeneralPurpose;
 
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.List;
 
 public class UserReserveService {
@@ -57,9 +64,25 @@ public class UserReserveService {
                 biglietti.get(biglietti.size()-1).getId()
         );
 
-        if (postoServiceGeneralPurpose.postoIsAlredyAssigned(userReservePosto.id_posto()) == null){
+        if (postoServiceGeneralPurpose.getPostoById(userReservePosto.id_posto()).getAvailable_unavailable() == Availability.available){
             postoServiceGeneralPurpose.updatePosto(postoUpdateDto);
+        } else {
+            throw new PostoIsAlreadyTakenException("Il Posto scelto è già prenotato.");
         }
+    }
 
+    public static void main(String[] args) throws JDBCErrorConnectionException, SQLException {
+        UserServiceGeneralPurpose userServiceGeneralPurpose = new UserServiceGeneralPurpose();
+        PostoServiceGeneralPurpose postoServiceGeneralPurpose = new PostoServiceGeneralPurpose();
+        BigliettoServiceGeneralPurpose bigliettoServiceGeneralPurpose = new BigliettoServiceGeneralPurpose();
+        SpettacoloServiceGeneralPurpose spettacoloServiceGeneralPurpose = new SpettacoloServiceGeneralPurpose();
+        SedeServiceGeneralPurpose sedeServiceGeneralPurpose = new SedeServiceGeneralPurpose();
+        SalaServiceGeneralPurpose salaServiceGeneralPurpose = new SalaServiceGeneralPurpose();
+
+        UserReserveService userReserveService = new UserReserveService();
+
+        UserRegisterDto userRegisterDto = new UserRegisterDto("Marco","Fragnoli","marcofragnoli@gmail.com","Via Bulgaria","3452445679");
+        userServiceGeneralPurpose.registerUser(userRegisterDto);
+        SpettacoloRegisterDto spettacoloRegisterDto = new SpettacoloRegisterDto(Time.valueOf("18:00:00"),"Via del Corso", Genere.commedia,"La Commedia");
     }
 }
