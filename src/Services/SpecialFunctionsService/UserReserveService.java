@@ -2,11 +2,14 @@ package Services.SpecialFunctionsService;
 
 import Dtos.BigliettoDtos.BigliettoRegisterDto;
 import Dtos.PostoDtos.PostoUpdateDto;
+import Dtos.SalaDtos.SalaRegisterDto;
+import Dtos.SedeDtos.SedeRegisterDto;
 import Dtos.SpecialFunctionDtos.UserReservePostoDto;
 import Dtos.SpettacoloDtos.SpettacoloRegisterDto;
 import Dtos.UserDtos.UserRegisterDto;
 import Entities.Biglietto;
 import Entities.EnumKeyWords.PostoEnums.Availability;
+import Entities.EnumKeyWords.SedeEnums.Location;
 import Entities.EnumKeyWords.SpettacoloEnums.Genere;
 import ExceptionHandlers.GeneralExceptionsTestings.MaxReservedTicket;
 import ExceptionHandlers.GeneralExceptionsTestings.NoOutputException;
@@ -71,7 +74,7 @@ public class UserReserveService {
         }
     }
 
-    public static void main(String[] args) throws JDBCErrorConnectionException, SQLException {
+    public static void main(String[] args) throws JDBCErrorConnectionException, SQLException, ObjNotFoundException, JDBCNoValueFieldException, UserNotFoundException {
         UserServiceGeneralPurpose userServiceGeneralPurpose = new UserServiceGeneralPurpose();
         PostoServiceGeneralPurpose postoServiceGeneralPurpose = new PostoServiceGeneralPurpose();
         BigliettoServiceGeneralPurpose bigliettoServiceGeneralPurpose = new BigliettoServiceGeneralPurpose();
@@ -83,6 +86,17 @@ public class UserReserveService {
 
         UserRegisterDto userRegisterDto = new UserRegisterDto("Marco","Fragnoli","marcofragnoli@gmail.com","Via Bulgaria","3452445679");
         userServiceGeneralPurpose.registerUser(userRegisterDto);
+
+        BigliettoRegisterDto bigliettoRegisterDto = new BigliettoRegisterDto(userServiceGeneralPurpose.getUserById(1).getId());
+
+
         SpettacoloRegisterDto spettacoloRegisterDto = new SpettacoloRegisterDto(Time.valueOf("18:00:00"),"Via del Corso", Genere.commedia,"La Commedia");
+        spettacoloServiceGeneralPurpose.registerSpettacolo(spettacoloRegisterDto);
+
+        SalaRegisterDto salaRegisterDto = new SalaRegisterDto("Gold",null,null,spettacoloServiceGeneralPurpose.getSpettacoloById(1).getId());
+        salaServiceGeneralPurpose.insertNewSala(salaRegisterDto);
+
+        SedeRegisterDto sedeRegisterDto = new SedeRegisterDto("Il Cinema","Via Marmora","Roma", Location.inside,salaServiceGeneralPurpose.getSalaById(1).getId());
+        sedeServiceGeneralPurpose.insertNewSede(sedeRegisterDto);
     }
 }
