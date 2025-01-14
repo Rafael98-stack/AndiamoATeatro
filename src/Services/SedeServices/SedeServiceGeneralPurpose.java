@@ -2,6 +2,7 @@ package Services.SedeServices;
 
 import Dtos.SedeDtos.SedeRegisterDto;
 import Dtos.SedeDtos.SedeUpdateDto;
+import Entities.Sala;
 import Entities.Sede;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
@@ -25,6 +26,10 @@ public class SedeServiceGeneralPurpose {
     public List<Sede> getAllSedi() throws SQLException, JDBCNoValueFieldException, ObjNotFoundException {
         sedeDAO.getAllSedi();
         return null;
+    }
+
+    public List<Sala> getAllSaleBySedeId(Integer id){
+        return getAllSaleBySedeId(id);
     }
 
     public void insertNewSede(SedeRegisterDto sedeRegisterDto) throws SQLException {

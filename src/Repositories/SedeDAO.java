@@ -2,6 +2,7 @@ package Repositories;
 
 import Configurations.JDBC;
 import Entities.EnumKeyWords.SedeEnums.Location;
+import Entities.Sala;
 import Entities.Sede;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
@@ -62,6 +63,27 @@ public class SedeDAO {
             return posti;
         }
         throw new ObjNotFoundException("Sedi non trovati.");
+    }
+
+    public List<Sala> getAllSaleBySedeId(Integer id) throws ObjNotFoundException, SQLException {
+        String query = "SELECT sa.*, se.id AS id_sede FROM Sede se JOIN Sala sa ON se.id_sala = sa.id WHERE se.id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1,id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()){
+            List<Sala> sale = new ArrayList<>();
+            while (resultSet.next()){
+                Sala sala = new Sala(
+                        resultSet.getString("nome"),
+                        resultSet.getInt("numero_posti"),
+                        resultSet.getInt("id_posto"),
+                        resultSet.getInt("id_spettacolo")
+                );
+                sale.add(sala);
+            }
+            return sale;
+        }
+        throw new ObjNotFoundException("Nessuna Sala trovata");
     }
 
     public void insertNewSede(Sede sede) throws SQLException {

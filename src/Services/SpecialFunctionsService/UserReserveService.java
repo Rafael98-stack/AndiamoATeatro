@@ -42,16 +42,13 @@ public class UserReserveService {
 
     public void UserReservePosto (UserReservePostoDto userReservePosto) throws ObjNotFoundException, SQLException, PostiNotFoundException, JDBCNoValueFieldException, MaxReservedTicket, UserNotFoundException, PostoNotFoundException, PostoIsAlreadyTakenException, NoOutputException {
 
-
-
-
-
         if (bigliettoServiceGeneralPurpose.getBigliettoCountUser(userReservePosto.id_user()) == 4){
             System.out.println("Numero massimo di biglietti raggiunto.");
         if (bigliettoServiceGeneralPurpose.getBigliettoCountUser(userReservePosto.id_user()) > 4){
             throw new MaxReservedTicket("Numero massimo di biglietti prenotato.");
         }
         }
+
         BigliettoRegisterDto bigliettoRegisterDto = new BigliettoRegisterDto(
                 userReservePosto.id_user()
         );
@@ -59,11 +56,10 @@ public class UserReserveService {
         bigliettoServiceGeneralPurpose.insertNewBiglietto(bigliettoRegisterDto);
         List<Biglietto> biglietti = userServiceGeneralPurpose.getAllBigliettiByUserId(userReservePosto.id_user());
 
-
         PostoUpdateDto postoUpdateDto = new PostoUpdateDto(
-                userReservePosto.id_posto(),
-                userReservePosto.fila(),
-                userReservePosto.numero(),
+                postoServiceGeneralPurpose.getPostoById(userReservePosto.id_posto()).getId(),
+                postoServiceGeneralPurpose.getPostoById(userReservePosto.id_posto()).getFila(),
+                postoServiceGeneralPurpose.getPostoById(userReservePosto.id_posto()).getNumero(),
                 Availability.unavailable,
                 biglietti.get(biglietti.size()-1).getId()
         );
@@ -73,6 +69,7 @@ public class UserReserveService {
         } else {
             throw new PostoIsAlreadyTakenException("Il Posto scelto è già prenotato.");
         }
+
     }
 
     public static void main(String[] args) throws JDBCErrorConnectionException, SQLException, ObjNotFoundException, JDBCNoValueFieldException, UserNotFoundException, PostoNotFoundException {
