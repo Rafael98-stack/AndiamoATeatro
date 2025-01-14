@@ -2,6 +2,7 @@ package Services.SalaServices;
 
 import Dtos.SalaDtos.SalaRegisterDto;
 import Dtos.SalaDtos.SalaUpdateDto;
+import Entities.Posto;
 import Entities.Sala;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
@@ -26,6 +27,10 @@ public class SalaServiceGeneralPurpose {
     public List<Sala> getAllSale() throws UsersNotFoundException, SQLException, ObjNotFoundException {
         salaDAO.getAllSale();
         return null;
+    }
+
+    public List<Posto> getAllPostiBySalaId(Integer id){
+        return getAllPostiBySalaId(id);
     }
 
     public void insertNewSala(SalaRegisterDto salaRegisterDto) throws SQLException {

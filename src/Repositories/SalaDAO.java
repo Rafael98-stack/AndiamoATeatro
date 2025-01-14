@@ -1,9 +1,13 @@
 package Repositories;
 
 import Configurations.JDBC;
+import Entities.EnumKeyWords.PostoEnums.Availability;
+import Entities.Posto;
 import Entities.Sala;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
+import ExceptionHandlers.JDBCExceptions.JDBCNoValueFieldException;
+import ExceptionHandlers.PostoExceptions.PostiNotFoundException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -75,6 +79,28 @@ public class SalaDAO {
         preparedStatement.setInt(4,sala.getId_spettacolo());
         preparedStatement.setInt(5,sala.getId());
         preparedStatement.executeUpdate();
+    }
+
+    public List<Posto> getAllPostiBySalaId(Integer id) throws SQLException, JDBCNoValueFieldException, PostiNotFoundException {
+        String query = "SELECT s.id AS id_sala , p.id AS id_posto FROM Sala s JOIN Posto p ON s.id_posto = p.id WHERE s.id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1,id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()){
+            List<Posto> posti = new ArrayList<>();
+            while(resultSet.next()){
+                Posto posto = new Posto(
+                        resultSet.getString("fila"),
+                        resultSet.getInt("numero"),
+                        Availability.fromString(resultSet.getString("available_unavailable")),
+                        resultSet.getInt("id_biglietto")
+                );
+                posto.setId(resultSet.getInt("id"));
+                posti.add(posto);
+            }
+            return posti;
+        }
+        throw new PostiNotFoundException("Nessun posto trovato.");
     }
 
     public void deleteSalaById(Integer id) throws SQLException {
