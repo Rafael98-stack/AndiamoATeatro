@@ -4,6 +4,7 @@ import Dtos.SedeDtos.SedeRegisterDto;
 import Dtos.SedeDtos.SedeUpdateDto;
 import Entities.Sala;
 import Entities.Sede;
+import Entities.Spettacolo;
 import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
 import ExceptionHandlers.JDBCExceptions.JDBCNoValueFieldException;
@@ -21,6 +22,10 @@ public class SedeServiceGeneralPurpose {
     public Sede getSedeById(Integer id) throws SQLException, JDBCNoValueFieldException, ObjNotFoundException {
         sedeDAO.getSedeById(id);
         return null;
+    }
+
+    public List<Spettacolo> getAllSpettacoliBySedeNome(String comune) throws ObjNotFoundException, SQLException, JDBCNoValueFieldException {
+        return sedeDAO.getAllSpettacoliBySedeNome(comune);
     }
 
     public List<Sede> getAllSedi() throws SQLException, JDBCNoValueFieldException, ObjNotFoundException {

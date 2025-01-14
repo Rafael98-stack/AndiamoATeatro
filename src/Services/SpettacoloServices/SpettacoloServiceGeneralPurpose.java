@@ -30,8 +30,11 @@ public class SpettacoloServiceGeneralPurpose {
         Spettacolo spettacolo = new Spettacolo(
                 spettacoloRegisterDto.orario(),
                 spettacoloRegisterDto.luogo(),
+                spettacoloRegisterDto.prezzo(),
                 spettacoloRegisterDto.genere(),
-                spettacoloRegisterDto.titolo()
+                spettacoloRegisterDto.titolo(),
+                spettacoloRegisterDto.data(),
+                spettacoloRegisterDto.durata()
         );
         spettacoloDAO.insertNewSpettacolo(spettacolo);
     }
@@ -40,8 +43,11 @@ public class SpettacoloServiceGeneralPurpose {
         Spettacolo spettacolo = new Spettacolo(
                 spettacoloUpdateDto.orario(),
                 spettacoloUpdateDto.luogo(),
+                spettacoloUpdateDto.prezzo(),
                 spettacoloUpdateDto.genere(),
-                spettacoloUpdateDto.titolo()
+                spettacoloUpdateDto.titolo(),
+                spettacoloUpdateDto.data(),
+                spettacoloUpdateDto.durata()
         );
         spettacolo.setId(spettacoloUpdateDto.id());
         spettacoloDAO.updateSpettacolo(spettacolo);

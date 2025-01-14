@@ -2,6 +2,7 @@ package Repositories;
 
 import Configurations.JDBC;
 import Entities.EnumKeyWords.SedeEnums.Location;
+import Entities.EnumKeyWords.SpettacoloEnums.Genere;
 import Entities.Sala;
 import Entities.Sede;
 import Entities.Spettacolo;
@@ -9,10 +10,8 @@ import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
 import ExceptionHandlers.JDBCExceptions.JDBCNoValueFieldException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,11 +65,28 @@ public class SedeDAO {
         throw new ObjNotFoundException("Sedi non trovati.");
     }
 
-    public List<Spettacolo> getAllSpettacoliBySedeNome(String comune) throws SQLException {
+    public List<Spettacolo> getAllSpettacoliBySedeNome(String comune) throws SQLException, JDBCNoValueFieldException, ObjNotFoundException {
         String query = "SELECT sp.* FROM Sede se JOIN Sala sa ON se.id_sala = sa.id JOIN Spettacolo sp ON sa.id_spettacolo = sp.id WHERE se.nome = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-
-        return null;
+        preparedStatement.setString(1,comune);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()){
+            List<Spettacolo> spettacoli = new ArrayList<>();
+            while (resultSet.next()){
+                Spettacolo spettacolo = new Spettacolo(
+                        Time.valueOf(resultSet.getString("orario")),
+                        resultSet.getString("luogo"),
+                        resultSet.getInt("prezzo"),
+                        Genere.fromString(resultSet.getString("genere")),
+                        resultSet.getString("titolo"),
+                        resultSet.getDate("data").toLocalDate(),
+                        Duration.ofHours(resultSet.getLong("durata"))
+                );
+                spettacolo.setId(resultSet.getInt("id"));
+                spettacoli.add(spettacolo);
+            }
+        }
+        throw new ObjNotFoundException("Spettacoli non trovati.");
     }
 
     public List<Sala> getAllSaleBySedeId(Integer id) throws ObjNotFoundException, SQLException {

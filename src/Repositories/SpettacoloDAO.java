@@ -7,10 +7,8 @@ import ExceptionHandlers.GeneralExceptionsTestings.ObjNotFoundException;
 import ExceptionHandlers.JDBCExceptions.JDBCErrorConnectionException;
 import ExceptionHandlers.JDBCExceptions.JDBCNoValueFieldException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +25,13 @@ public class SpettacoloDAO {
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()){
             Spettacolo spettacolo = new Spettacolo(
-                    resultSet.getTime("orario"),
+                    Time.valueOf(resultSet.getString("orario")),
                     resultSet.getString("luogo"),
-                    Genere.fromString(resultSet.getString("id_posto")),
-                    resultSet.getString("titolo")
+                    resultSet.getInt("prezzo"),
+                    Genere.fromString(resultSet.getString("genere")),
+                    resultSet.getString("titolo"),
+                    resultSet.getDate("data").toLocalDate(),
+                    Duration.ofMinutes(resultSet.getLong("durata"))
             );
             spettacolo.setId(resultSet.getInt("id"));
             return spettacolo;
@@ -46,10 +47,13 @@ public class SpettacoloDAO {
         if (resultSet.next()){
             while (resultSet.next()){
                 Spettacolo spettacolo = new Spettacolo(
-                        resultSet.getTime("orario"),
+                        Time.valueOf(resultSet.getString("orario")),
                         resultSet.getString("luogo"),
-                        Genere.fromString(resultSet.getString("id_posto")),
-                        resultSet.getString("titolo")
+                        resultSet.getInt("prezzo"),
+                        Genere.fromString(resultSet.getString("genere")),
+                        resultSet.getString("titolo"),
+                        resultSet.getDate("data").toLocalDate(),
+                        Duration.ofMinutes(resultSet.getLong("durata"))
                 );
                 spettacolo.setId(resultSet.getInt("id"));
                 sale.add(spettacolo);
@@ -59,22 +63,28 @@ public class SpettacoloDAO {
     }
 
     public void insertNewSpettacolo(Spettacolo spettacolo) throws SQLException {
-        String query = "INSERT INTO Spettacolo (orario,luogo,genere,titolo) VALUES(?,?,?,?)";
+        String query = "INSERT INTO Spettacolo (orario,luogo,prezzo,genere,titolo,data,durata) VALUES(?,?,?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setTime(1, spettacolo.getOrario());
         preparedStatement.setString(2, spettacolo.getLuogo());
-        preparedStatement.setString(3, spettacolo.getGenere().name());
-        preparedStatement.setString(4, spettacolo.getTitolo());
+        preparedStatement.setInt(3, spettacolo.getPrezzo());
+        preparedStatement.setString(4, spettacolo.getGenere().name());
+        preparedStatement.setString(5, spettacolo.getTitolo());
+        preparedStatement.setDate(6, Date.valueOf(spettacolo.getData()));
+        preparedStatement.setLong(7, spettacolo.getDurata().getSeconds()/60);
         preparedStatement.executeUpdate();
     }
     public void updateSpettacolo(Spettacolo spettacolo) throws SQLException {
-        String query = "UPDATE Spettacolo SET nome = ?, numero_posti = ?, id_posto = ?, id_spettacolo = ? WHERE id = ?";
+        String query = "UPDATE Spettacolo SET orario = ?, luogo = ?, prezzo = ?, genere = ?, titolo = ?, data = ?, durata = ? WHERE id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setTime(1, spettacolo.getOrario());
         preparedStatement.setString(2, spettacolo.getLuogo());
-        preparedStatement.setString(3, spettacolo.getGenere().name());
-        preparedStatement.setString(4, spettacolo.getTitolo());
-        preparedStatement.setInt(5,spettacolo.getId());
+        preparedStatement.setInt(3, spettacolo.getPrezzo());
+        preparedStatement.setString(4, spettacolo.getGenere().name());
+        preparedStatement.setString(5, spettacolo.getTitolo());
+        preparedStatement.setDate(6, Date.valueOf(spettacolo.getData()));
+        preparedStatement.setLong(7, spettacolo.getDurata().getSeconds()/60);
+        preparedStatement.setInt(8,spettacolo.getId());
         preparedStatement.executeUpdate();
     }
 
